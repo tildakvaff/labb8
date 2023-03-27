@@ -1,0 +1,55 @@
+#unittest för labb 8
+
+
+import unittest
+
+from s3 import *
+
+
+class SyntaxTest(unittest.TestCase):
+
+    def test1(self):
+        self.assertEqual(dela_upp_molekyl("N"), "Formeln är syntaktiskt korrekt")
+
+    def test2(self):
+        self.assertEqual(dela_upp_molekyl("Au"), "Formeln är syntaktiskt korrekt")
+
+    def test2(self):
+        self.assertEqual(dela_upp_molekyl("H2"), "Formeln är syntaktiskt korrekt")
+    
+    def test3(self):
+        self.assertEqual(dela_upp_molekyl("P21"), "Formeln är syntaktiskt korrekt")
+
+    def test4(self):
+        self.assertEqual(dela_upp_molekyl("Ag3"), "Formeln är syntaktiskt korrekt")
+
+    def test5(self):
+        self.assertEqual(dela_upp_molekyl("Fe12"), "Formeln är syntaktiskt korrekt")
+
+    def test6(self):
+        self.assertEqual(dela_upp_molekyl("Xx5"), "Formeln är syntaktiskt korrekt")
+
+    def test7(self):
+        self.assertEqual(dela_upp_molekyl("oa"), "Saknad stor bokstav vid radslutet oa")
+
+    def test8(self):
+        self.assertEqual(dela_upp_molekyl("cr12"), "Saknad stor bokstav vid radslutet cr12")
+
+    def test9(self):
+        self.assertEqual(dela_upp_molekyl("8"), "Saknad stor bokstav vid radslutet 8")
+
+    def test10(self):
+        self.assertEqual(dela_upp_molekyl("Cr0"), "För litet tal vid radslutet")
+
+    def test11(self):
+        self.assertEqual(dela_upp_molekyl("Pb1"), "För litet tal vid radslutet")
+
+
+
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+
+
