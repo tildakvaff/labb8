@@ -1,0 +1,144 @@
+#Erik Hellström, Eyasu Alemiye
+#Tillämpad datalogi DD1320
+#Laboration 8 - en enkel syntax
+#DENNA ÄR KOMPATIBEL MED KATTIS
+
+#importerar länkad lista
+from linkedq import *
+from sys import stdin
+
+class Syntaxfel(Exception): 
+    pass
+
+def R1_läsmolekyl(q):
+    tecken1 = q.peek()
+    if R2_läs_om_siffra(tecken1) == True:
+        radslut = ""
+        while not q.peek() == "&":
+            radslut += str(q.dequeue())
+        raise Syntaxfel(f'Saknad stor bokstav vid radslutet {radslut}')  
+    else:
+        if R4_läs_små_bokstäver(tecken1) == True:
+            radslut = ""
+            while not q.peek() =="&":
+                radslut += str(q.dequeue())
+            raise Syntaxfel(f'Saknad stor bokstav vid radslutet {radslut}')
+        else:
+            q.dequeue()#här tar vi ut första tecknet
+            tecken2 = q.peek()
+            if q.peek() == "&":
+                pass
+            else:
+
+                    if R2_läs_om_siffra(tecken2) == False:
+                        if R3_läs_stora_bokstäver(tecken2) == True:
+                            radslut = ""
+                            while not q.peek() =="&":
+                                    radslut += str(q.dequeue())
+                            raise Syntaxfel(f'Saknad liten bokstav vid radslutet {radslut}')
+                        else:
+                            q.dequeue() #här tar vi ut tecken 3
+                            tecken3 = q.dequeue()                         
+                            R5_läs_nummer(tecken3,q)
+                    else:
+                        utplockat_tecken2 = q.dequeue()
+                        R5_läs_nummer(utplockat_tecken2,q)
+   
+
+
+#returnerar true om det är en siffra, returnerar false annars
+def R2_läs_om_siffra(tecken):
+    if tecken.isnumeric() == True:
+        return True
+    else:
+        return False
+    
+
+    
+#returnerar True om det är en stor, returnerar false annars
+def R3_läs_stora_bokstäver(tecken):
+    if tecken.isupper() == True:
+        return True
+    else:
+        return False     
+
+#returnerar true om det är en liten, returnerar false annars
+def R4_läs_små_bokstäver(tecken):
+    if tecken.islower() == True:
+        return True
+    else:
+        return False
+
+#Villkor för siffran 1 och noll som första siffra i nummerföljden
+def R5_läs_nummer(tecken,q):
+    if tecken == "1":
+        if q.peek() == "&":
+            raise Syntaxfel("För litet tal vid radslutet ")
+    if tecken =="0":
+        radslut = ""
+        while not q.peek() =="&":
+            radslut += str(q.dequeue())
+        raise Syntaxfel(f'För litet tal vid radslutet {radslut}')
+    else:
+        pass
+
+
+
+#_____________________________________________________________________________________________________________________
+def dela_upp_molekyl(molekyl):
+        q = LinkedQ()
+        for varje_tecken in molekyl:
+                q.enqueue(varje_tecken)
+        q.enqueue("&")
+        return kollamolekyl(q)
+        
+def kollamolekyl(q):
+    try:
+        R1_läsmolekyl(q)
+        return("Formeln är syntaktiskt korrekt")
+    except Syntaxfel as fel:
+        return(str(fel))
+#____________________________________________________________________________________________________________________
+
+# #FÖR ATT LÄSA FRÅN TEXTFIL
+# def main():
+#     with open("molekyler.txt", "r") as molekylfil:
+#         molekyllista = molekylfil.read().splitlines()
+#         #print(molekyllista)
+#     for varje_rad in molekyllista:
+#         #print(varje_rad)
+#         if varje_rad.strip() =="#":
+#             break
+#         #print("hej")
+#         resultat = dela_upp_molekyl(varje_rad)
+#         print(resultat)
+    
+
+#lista = ["N", "Au", "H2", "P21", "Ag3", "Fe12", "Xx5", "#"]
+#lista = ["oa","c12", "8", "Cr0", "Pb1", "#"]
+
+
+#FÖR ATT LÄSA FRÅN STDIN - KATTIS-KOMPATIBEL
+def main(): 
+    for varje_rad in stdin: #in stdin
+        if varje_rad.strip() == "#":
+            break            
+        else:
+            varje_rad = varje_rad.strip()
+            resultat = dela_upp_molekyl(varje_rad)
+            print(resultat)
+    
+
+# #ALTERNATIVT SÄTT ATT LÄSA FRÅN KATTIS
+# def main():
+#     rad = stdin.readline()
+#     if rad == "#":
+#         pass
+#     else:
+#         resultat = dela_upp_molekyl(rad)
+#         print(resultat)
+#____________________________________________________________________________________________________________________
+
+if __name__ == "__main__":
+    main()
+
